@@ -1,2 +1,2 @@
-# inflow
-Payment infrastructure Protocol for high value assets 
+# Flowpay
+Payment infrastructure Protocol
