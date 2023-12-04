@@ -13,9 +13,9 @@ import {Zapper} from "./../Zapper.sol";
 contract WalletFactory {
     Wallet public immutable walletImplementation;
 
-    constructor(IEntryPoint entryPoint, Zapper zapper) {
+    constructor(IEntryPoint entryPoint /* , Zapper zapper */) {
         walletImplementation = new Wallet(entryPoint, address(this));
-        walletImplementation.setZapper(zapper);
+        /* walletImplementation.setZapper(zapper); */
     }
 
     function getAddress(
