@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import {IEntryPoint} from "account-abstraction/interfaces/IEntryPoint.sol";
+import {IEntryPoint} from "@account-abstraction/interfaces/IEntryPoint.sol";
 import {Wallet} from "./Wallet.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {Create2} from "@openzeppelin/contracts/utils/Create2.sol";
@@ -16,7 +16,7 @@ contract WalletFactory {
     }
 
     function getAddress(
-        address memory owner,
+        address owner,
         uint256 salt
     ) public view returns (address) {
         // Encode the initialize function in our wallet with the owners array as an argument into a bytes array
@@ -38,7 +38,7 @@ contract WalletFactory {
     }
 
     function createAccount(
-        address memory owner,
+        address owner,
         uint256 salt
     ) external returns (Wallet) {
         // Get the counterfactual address

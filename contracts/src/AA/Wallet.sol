@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.19;
 
-import {IEntryPoint} from "account-abstraction/interfaces/IEntryPoint.sol";
-import {BaseAccount} from "account-abstraction/core/BaseAccount.sol";
+import {IEntryPoint} from "@account-abstraction/interfaces/IEntryPoint.sol";
+import {BaseAccount} from "@account-abstraction/core/BaseAccount.sol";
 // struct representing users Ops
-import {UserOperation} from "account-abstraction/interfaces/UserOperation.sol";
+import {UserOperation} from "@account-abstraction/interfaces/UserOperation.sol";
 // to validate the signature, can be changed by other signature verification
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 // initalizer contract to verify if the signers ( owner of the wallet) are valid and run only once
 import {Initializable} from "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
-import {TokenCallbackHandler} from "account-abstraction/samples/callback/TokenCallbackHandler.sol";
+import {TokenCallbackHandler} from "@account-abstraction/samples/callback/TokenCallbackHandler.sol";
 
 import {Zapper} from "./../Zapper.sol";
 

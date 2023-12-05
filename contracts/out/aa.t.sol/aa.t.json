@@ -1,0 +1,174 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "test/aa/aa.t.sol",
+    "id": 49801,
+    "exportedSymbols": {
+      "Create2": [
+        47142
+      ],
+      "DSTest": [
+        3371
+      ],
+      "ERC1967Proxy": [
+        44769
+      ],
+      "ERC20": [
+        46156
+      ],
+      "IEntryPoint": [
+        634
+      ],
+      "StdAssertions": [
+        4864
+      ],
+      "StdChains": [
+        5628
+      ],
+      "StdCheats": [
+        8481
+      ],
+      "StdInvariant": [
+        8806
+      ],
+      "StdStorage": [
+        9572
+      ],
+      "StdStyle": [
+        12422
+      ],
+      "StdUtils": [
+        13270
+      ],
+      "Test": [
+        13321
+      ],
+      "TestBase": [
+        3437
+      ],
+      "Vm": [
+        15078
+      ],
+      "Wallet": [
+        49199
+      ],
+      "WalletFactory": [
+        49372
+      ],
+      "Zapper": [
+        49793
+      ],
+      "console": [
+        23142
+      ],
+      "console2": [
+        31267
+      ],
+      "safeconsole": [
+        44505
+      ],
+      "stdError": [
+        8547
+      ],
+      "stdJson": [
+        9398
+      ],
+      "stdMath": [
+        9540
+      ],
+      "stdStorage": [
+        11211
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "39:196:58",
+    "nodes": [
+      {
+        "id": 49795,
+        "nodeType": "PragmaDirective",
+        "src": "39:23:58",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "0.8",
+          ".19"
+        ]
+      },
+      {
+        "id": 49796,
+        "nodeType": "ImportDirective",
+        "src": "64:31:58",
+        "nodes": [],
+        "absolutePath": "lib/forge-std/src/console.sol",
+        "file": "forge-std/console.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 49801,
+        "sourceUnit": 23143,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 49797,
+        "nodeType": "ImportDirective",
+        "src": "96:28:58",
+        "nodes": [],
+        "absolutePath": "lib/forge-std/src/Test.sol",
+        "file": "forge-std/Test.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 49801,
+        "sourceUnit": 13322,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 49799,
+        "nodeType": "ImportDirective",
+        "src": "125:68:58",
+        "nodes": [],
+        "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 49801,
+        "sourceUnit": 46157,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 49798,
+              "name": "ERC20",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 46156,
+              "src": "133:5:58",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 49800,
+        "nodeType": "ImportDirective",
+        "src": "194:40:58",
+        "nodes": [],
+        "absolutePath": "src/AA/WalletFactory.sol",
+        "file": "../../src/AA/WalletFactory.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 49801,
+        "sourceUnit": 49373,
+        "symbolAliases": [],
+        "unitAlias": ""
+      }
+    ],
+    "license": "UNLICENSED"
+  },
+  "id": 58
+}
