@@ -1,9 +1,11 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity 0.8.19;
 
-import {Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step.sol";
+import {Ownable2Step} from
+    "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {Pausable} from "@openzeppelin/contracts/security/Pausable.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {SafeERC20} from
+    "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Zapper is Ownable2Step, Pausable {
@@ -18,16 +20,21 @@ contract Zapper is Ownable2Step, Pausable {
     error NotRouter(address router);
     error SwapFailed(string reason);
     error InconsistantSwapData(
-        uint256 expectedTokenInBalance,
-        uint256 actualTokenInBalance
+        uint256 expectedTokenInBalance, uint256 actualTokenInBalance
     );
     error NotEnoughUnderlying(
-        uint256 previewedUnderlying,
-        uint256 withdrawedUnderlying
+        uint256 previewedUnderlying, uint256 withdrawedUnderlying
     );
-    error NoTokenOutReceived(uint256 tokenOutBalance, uint256 tokenInBalance);
+    error NoTokenOutReceived(
+        uint256 tokenOutBalance,
+        uint256 tokenInBalance
+    );
 
-    event Zap(address indexed router, IERC20 tokenIn, uint256 amount);
+    event ZapAndDoSomething(
+        address indexed router,
+        IERC20 tokenIn,
+        uint256 amount
+    );
 
     event routerApproved(address indexed router, IERC20 indexed token);
     event routerAuthorized(address indexed router, bool allowed);
@@ -62,10 +69,10 @@ contract Zapper is Ownable2Step, Pausable {
         _unpause();
     }
 
-    function approveTokenForRouter(
-        IERC20 token,
-        address router
-    ) public onlyOwner {
+    function approveTokenForRouter(IERC20 token, address router)
+        public
+        onlyOwner
+    {
         token.forceApprove(address(router), type(uint256).max);
         emit routerApproved(address(router), token);
     }
@@ -76,13 +83,18 @@ contract Zapper is Ownable2Step, Pausable {
         emit routerAuthorized(router, authorized);
     }
 
-    function zap(
+    function zapAndDoSomething(
         IERC20 tokenIn,
         IERC20 tokenOut,
         address router,
         uint256 amount,
         bytes calldata data
-    ) public payable onlyAllowedRouter(router) whenNotPaused {
+    )
+        public
+        payable
+        onlyAllowedRouter(router)
+        whenNotPaused
+    {
         uint256 expectedBalance;
 
         if (msg.value == 0) {
@@ -106,15 +118,17 @@ contract Zapper is Ownable2Step, Pausable {
             });
         }
 
-        emit Zap({router: router, tokenIn: tokenIn, amount: amount});
+        emit ZapAndDoSomething({
+            router: router,
+            tokenIn: tokenIn,
+            amount: amount
+        });
         if (tokenOut.balanceOf(address(this)) == 0) {
             revert NoTokenOutReceived(
                 tokenOut.balanceOf(address(this)),
                 address(this).balance
             );
         }
-
-        tokenOut.safeTransfer(msg.sender, tokenOut.balanceOf(address(this)));
     }
 
     function _transferTokenInAndApprove(
@@ -128,13 +142,11 @@ contract Zapper is Ownable2Step, Pausable {
         }
     }
 
-    function _execute(
-        address target,
-        bytes memory data
-    ) private returns (bytes memory response) {
-        (bool success, bytes memory _data) = target.call{value: msg.value}(
-            data
-        );
+    function _execute(address target, bytes memory data)
+        private
+        returns (bytes memory response)
+    {
+        (bool success, bytes memory _data) = target.call{value: msg.value}(data);
         if (!success) {
             if (data.length > 0) revert SwapFailed(string(_data));
             else revert SwapFailed("Unknown reason");
