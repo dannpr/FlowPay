@@ -6,7 +6,10 @@ import {
   walletContract,
   walletFactoryContract,
 } from "./../contract";
-import { getUserOperationBuilder } from "./createUserOpBuilder";
+import {
+  getUserOperationBuilder /* ,
+  getPaymasterData, */,
+} from "./createUserOpBuilder";
 import { bundler, provider } from "../providers";
 import { Client, IUserOperation, Presets } from "userop";
 import dotenv from "dotenv";
@@ -21,24 +24,31 @@ export async function CreatePayflowAccount(
   try {
     // Generate a random salt, convert it to hexadecimal, and prepend "0x"
     const salt = "0x" + randomBytes(32).toString("hex");
+    const tstSalt = process.env.TST_SALT || "";
+
+    console.log("0) Salt is generated : ", tstSalt, "\n");
 
     // signer creation
     const privateKey = ethers.Wallet.createRandom().privateKey;
+    const tstPrivateKey = process.env.TST_PRIVATE_KEY || "";
+    console.log("1) Key us generated : private key => ", tstPrivateKey, "\n");
 
-    console.log("1) Key us generated : private key => ", privateKey, "\n");
     const signer = new ethers.Wallet(privateKey);
     const signerAddress = signer.address;
+
+    const tstSigner = new ethers.Wallet(tstPrivateKey, provider);
+    const tstSignerAddress = tstSigner.address;
 
     // Call the getAddress function from the wallet factory contract with the signers and salt
     // This computes the counterfactual address for the wallet without deploying it
     const walletAddress = await walletFactoryContract.getAddress(
-      signerAddress,
-      salt
+      tstSignerAddress,
+      tstSalt
     );
 
     console.log("2) Wallet address is computed : ", walletAddress, "\n");
 
-    /*     // set the data to be sent to the wallet factory contract
+    // set the data to be sent to the wallet factory contract
     const data = walletFactoryContract.interface.encodeFunctionData(
       "createAccount",
       [process.env.ADDRESS, salt]
@@ -67,16 +77,17 @@ export async function CreatePayflowAccount(
       encodedCallData
     );
 
-    console.log("3) User Opération is built : ", userOpBuilder, "\n");
+    console.log("3) User Opération is built : ", userOpBuilder.getOp(), "\n");
 
-    userOpBuilder.useMiddleware(Presets.Middleware.getGasPrice(provider));
-
+    /*
     // init client
     const client = await Client.init(process.env.BUNDLER_RPC_URL_STACK || "");
-    console.log(`4) init client`);
+    console.log(`4)  client is init`);
 
+ 
     await client.buildUserOperation(userOpBuilder);
 
+    console.log(`4.5) built user operation with client`);
     // user Op to send ETH
     const userOp = userOpBuilder.getOp();
 
@@ -87,6 +98,7 @@ export async function CreatePayflowAccount(
 
     console.log("6) User Opération Hash : ", userOpHash, "\n");
 
+    
     // userOp signing
     const signature = await signer.signMessage(userOpHash);
     const signedUserOp: IUserOperation = {

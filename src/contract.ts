@@ -3,6 +3,8 @@ import Wallet from "./../contracts/abis/Wallet.sol/Wallet.json";
 import entrypoint from "./../contracts/abis/EntryPoint.sol/entrypoint.json";
 import { Contract } from "ethers";
 import { provider } from "./providers";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const walletContract = new Contract(
   process.env.WALLET_CONTRACT || "",

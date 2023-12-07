@@ -1,6 +1,9 @@
 import { BigNumber } from "ethers";
-/* import { defaultAbiCoder } from "ethers/lib/utils";
- */ import { Presets, UserOperationBuilder } from "userop";
+// import { defaultAbiCoder } from "ethers/lib/utils";
+import { Presets, UserOperationBuilder } from "userop";
+import dotenv from "dotenv";
+import { provider } from "../providers";
+dotenv.config();
 
 export async function getUserOperationBuilder(
   sender: string,
@@ -26,12 +29,7 @@ export async function getUserOperationBuilder(
     // Use the UserOperationBuilder class to create a new builder
     // Supply the builder with all the necessary details to create a userOp
     const userOpBuilder = new UserOperationBuilder()
-      .useDefaults({
-        preVerificationGas: 100_000,
-        callGasLimit: 100_000,
-        verificationGasLimit: 2_000_000,
-      })
-      .useMiddleware(paymasterMiddleware)
+      .useMiddleware(Presets.Middleware.getGasPrice(provider))
       .setSender(sender)
       .setNonce(nonce)
       .setCallData(encodedCallData)
@@ -39,16 +37,22 @@ export async function getUserOperationBuilder(
       // .setSignature(encodedSignature)
       .setInitCode(initCode);
 
-    /*
     // if the paymaster is a conttract
     // Estimate the userOp's gas cost related to the network id
     const { chainId } = await provider.getNetwork();
     // estimate the userOp's gas cost without paymaster
     const userOpToEstimateNoPaymaster = await userOpBuilder.buildOp(
-      process.env.ENTRY_POINT || "",
+      process.env.ENTRYPOINT || "",
       chainId
     );
+    console.log({ userOpToEstimateNoPaymaster });
 
+    const userOpWithPaymaster =
+      userOpBuilder.useMiddleware(paymasterMiddleware);
+
+    console.log({ userOpWithPaymaster });
+
+    /*
     // estimate the userOp's gas cost with paymaster
     // don't use it yet to do complicated stuff
     const paymasterAndData = await getPaymasterData(
