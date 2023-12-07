@@ -9,7 +9,7 @@ dotenv.config();
 export async function getUserOperationBuilder(
   sender: string,
   nonce: BigNumber,
-  initCode: Uint8Array,
+  //initCode: Uint8Array,
   encodedCallData: string
   /*   signature: string
    */
@@ -19,19 +19,20 @@ export async function getUserOperationBuilder(
     // const encodedSignature = defaultAbiCoder.encode(["bytes"], [signature]);
 
     // set the paymaster
-    const paymasterContext = { type: "payg" };
+    /*     const paymasterContext = { type: "payg" };
     const paymasterUrl: string = process.env.PAYMASTER_URL_STACK || "";
-
+ */
     // Use the UserOperationBuilder class to create a new builder
     // Supply the builder with all the necessary details to create a userOp
     const userOpBuilder = new UserOperationBuilder()
       .setSender(sender)
       .setNonce(nonce)
-      .setCallData(encodedCallData)
-      // not needed for now
-      // .setSignature(encodedSignature)
-      //.setInitCode(initCode) not needed already deployed
-      .useMiddleware(Presets.Middleware.getGasPrice(provider))
+      .setCallData(encodedCallData);
+
+    // not needed for now
+    // .setSignature(encodedSignature)
+    //.setInitCode(initCode) not needed already deployed
+    /*  .useMiddleware(Presets.Middleware.getGasPrice(provider))
       .useMiddleware(
         Presets.Middleware.verifyingPaymaster(paymasterUrl, paymasterContext)
       );
@@ -54,7 +55,7 @@ export async function getUserOperationBuilder(
       chainId
     );
 
-    console.log({ UserOp });
+    console.log({ UserOp }); */
 
     // provider will have the same interface as a regular JsonRpcProvider.
     /*     const paymasterProvider = new BundlerJsonRpcProvider(rpcUrl).setBundlerRpc(
@@ -101,7 +102,7 @@ export async function getUserOperationBuilder(
       paymasterAndData,
     };
  */
-
+    console.log({ userOpBuilder });
     return userOpBuilder;
   } catch (e) {
     console.error(e);

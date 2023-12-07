@@ -66,18 +66,59 @@ export async function CreatePayflowAccount(
     // Encode the call data for the execute method
     const encodedCallData = walletContract.interface.encodeFunctionData(
       "execute",
-      [toAddress, value, initCode]
+      [
+        toAddress,
+        value,
+        "0x",
+        /* 
+          Don't need already deployed 
+          initCode 
+        */
+      ]
     );
-    
+
     // Get the user operation builder with the necessary parameters
     const userOpBuilder = await getUserOperationBuilder(
       walletContract.address,
       nonce,
-      initCode,
+      //initCode,
       encodedCallData
     );
 
+    // final settings
+
+    // set the paymaster
+    const paymasterContext = { type: "payg" };
+    const paymasterUrl: string = process.env.PAYMASTER_URL_STACK || "";
+
+    userOpBuilder
+      .useMiddleware(Presets.Middleware.getGasPrice(provider))
+      // userMiddleware to verify the paymaster is done after the signature
+      .useMiddleware(
+        Presets.Middleware.verifyingPaymaster(paymasterUrl, paymasterContext)
+      );
+
     console.log("3) User Opération is built : ", userOpBuilder.getOp(), "\n");
+
+    // sign userOp
+    // add the signature in the userOp builder
+
+    // get the user op hash then sign
+
+    // create client
+
+    // send it to the bundler
+
+    // if the paymaster is a conttract
+    // Estimate the userOp's gas cost related to the network id
+    /*     const { chainId } = await provider.getNetwork();
+    // estimate the userOp's gas cost without paymaster
+    const UserOp = await userOpBuilder.buildOp(
+      process.env.ENTRYPOINT || "",
+      chainId
+    );
+
+    console.log({ UserOp }); */
 
     /*
     // init client
