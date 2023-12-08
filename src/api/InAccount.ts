@@ -83,7 +83,7 @@ export async function CreatePayflowAccount(
     // Encode the call data for the execute method
     const encodedCallData = walletContract.interface.encodeFunctionData(
       "execute",
-      [toAddress, value, "0x" /* initCode */]
+      [toAddress, value,  initCode ]
     );
 
     // Get the user operation builder with the necessary parameters
