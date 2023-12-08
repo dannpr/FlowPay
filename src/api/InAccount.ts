@@ -63,9 +63,14 @@ export async function CreatePayflowAccount(
       [tstSignerAddress, salt]
     );
 
+    const decodeData = walletFactoryContract.interface.decodeFunctionData(
+      "createAccount(address, uint256)",
+      data
+    );
     // Initialize the initCode which will be used to deploy a new wallet
     const initCode = concat([walletFactoryContract.address, data]);
 
+    console.log(decodeData, "\n");
     // Get the nonce for the wallet address with a key of 0
     const nonce: BigNumber = await entrypointContract.getNonce(
       walletAddress,
@@ -83,7 +88,7 @@ export async function CreatePayflowAccount(
     // Encode the call data for the execute method
     const encodedCallData = walletContract.interface.encodeFunctionData(
       "execute",
-      [toAddress, value,  initCode ]
+      [toAddress, value, initCode]
     );
 
     // Get the user operation builder with the necessary parameters
