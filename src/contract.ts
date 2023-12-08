@@ -6,17 +6,15 @@ import { provider } from "./providers";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const walletContract = new Contract(
-  process.env.WALLET_CONTRACT || "",
-  Wallet.abi,
-  provider
-);
-
+export const getWalletContract = (walletAddress: string) => {
+  return new Contract(walletAddress, Wallet.abi, provider);
+};
 export const entrypointContract = new Contract(
   process.env.ENTRYPOINT || "",
   entrypoint.abi,
   provider
 );
+
 export const walletFactoryContract = new Contract(
   process.env.WALLET_FACTORY_CONTRACT || "",
   WalletFactory.abi,
