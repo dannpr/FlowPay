@@ -67,6 +67,7 @@ export async function CreatePayflowAccount(
       "createAccount(address, uint256)",
       data
     );
+
     // Initialize the initCode which will be used to deploy a new wallet
     const initCode = concat([walletFactoryContract.address, data]);
 
@@ -93,7 +94,7 @@ export async function CreatePayflowAccount(
 
     // Get the user operation builder with the necessary parameters
     const userOpBuilder = await getUserOperationBuilder(
-      walletContractAddress,
+      walletAddress,
       nonce,
       initCode,
       encodedCallData
@@ -153,6 +154,7 @@ export async function CreatePayflowAccount(
     */
       // .setSignature(signature);
       .useMiddleware(Presets.Middleware.signUserOpHash(tstSigner))
+      // paymaster middleware working on certain cases and depending on the funds that you have because it calculate your account
       .useMiddleware(
         Presets.Middleware.verifyingPaymaster(paymasterUrl, paymasterContext)
       );
@@ -191,14 +193,16 @@ export async function CreatePayflowAccount(
     const UserOp = await client.buildUserOperation(userOpBuilder);
 
     console.log({ UserOp });
-    /*
+
     console.log(`5) Built User Operation with client built`);
 
     const response = await client.sendUserOperation(userOpBuilder);
     const userOperationEvent = await response.wait();
 
-    console.log(`6) Transaction sent : ${userOperationEvent}`);
-
+    console.log(
+      `6) Transaction sent : ${userOperationEvent?.transactionHash ?? null}`
+    );
+    /*
     console.log(
       "8) Signed User Opération Hash sent : ",
       signedUserOpBuilder,

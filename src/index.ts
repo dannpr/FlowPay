@@ -23,9 +23,8 @@ async function main() {
   await sendUserOp(simpleAccount); */
 
   const to = process.env.ADDRESS || "";
-  //ethers.utils.parseEther("0.0000001");
 
-  const value = ethers.constants.Zero;
+  const value = ethers.constants.Zero; //ethers.utils.parseEther("0.000640");
 
   CreatePayflowAccount(to, value);
 }

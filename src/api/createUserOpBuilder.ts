@@ -28,7 +28,7 @@ export async function getUserOperationBuilder(
         verificationGasLimit: 2_000_000,
       })
       .setSender(sender)
-      .setInitCode(initCode)
+      // resolve the init code problem code is working .setInitCode(initCode)
       .setNonce(nonce)
       .setCallData(encodedCallData);
     //.useMiddleware(Presets.Middleware.signUserOpHash(signer));
