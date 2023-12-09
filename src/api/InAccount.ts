@@ -59,8 +59,8 @@ export async function CreatePayflowAccount(
 
     // set the data to be sent to the wallet factory contract
     const data = walletFactoryContract.interface.encodeFunctionData(
-      "createAccount(address, uint256)",
-      [tstSignerAddress, salt]
+      "createAccount",
+      [tstSignerAddress, tstSalt]
     );
 
     const decodeData = walletFactoryContract.interface.decodeFunctionData(
@@ -72,6 +72,7 @@ export async function CreatePayflowAccount(
     const initCode = concat([walletFactoryContract.address, data]);
 
     console.log(decodeData, "\n");
+
     // Get the nonce for the wallet address with a key of 0
     const nonce: BigNumber = await entrypointContract.getNonce(
       walletAddress,
@@ -79,14 +80,14 @@ export async function CreatePayflowAccount(
     );
 
     //get wallet contract
+    // maybe we can do simpler
     const walletContract = getWalletContract(walletAddress);
-
-    // get the wallet contract address
-    const walletContractAddress = walletContract.address;
 
     console.log(walletContract.address, "\n");
 
     // Encode the call data for the execute method
+    // other way to do it
+    // const encodedCallData =  simpleAccountAbi.encodeFunctionData("execute", [toAddress, value, initCode]);
     const encodedCallData = walletContract.interface.encodeFunctionData(
       "execute",
       [toAddress, value, initCode]
@@ -151,8 +152,9 @@ export async function CreatePayflowAccount(
         const signature = await tstSigner.signMessage(
           ethers.utils.arrayify(userOpHash)
       ); 
+            // .setSignature(signature);
+
     */
-      // .setSignature(signature);
       .useMiddleware(Presets.Middleware.signUserOpHash(tstSigner))
       // paymaster middleware working on certain cases and depending on the funds that you have because it calculate your account
       .useMiddleware(
@@ -166,14 +168,12 @@ export async function CreatePayflowAccount(
     const client = await Client.init(process.env.BUNDLER_RPC_URL_STACK || "");
     console.log(`4.b)  client is init`); /*
 
-    /*
-    console.log(
-      "6) User Opération Hash : %s and signed userOp hash : %s",
-      userOpHash,
-      signature,
-      "\n"
-    );
-*/
+    /*  console.log(
+          "6) User Opération Hash : %s and signed userOp hash : %s",
+          userOpHash,
+          signature,
+          "\n"
+        );*/
 
     /*     const userOpHash = await entrypointContract.getUserOpHash(userOp);
     const getUserOpS = await tstSigner.signMessage(
@@ -202,7 +202,9 @@ export async function CreatePayflowAccount(
     console.log(
       `6) Transaction sent : ${userOperationEvent?.transactionHash ?? null}`
     );
+
     /*
+    
     console.log(
       "8) Signed User Opération Hash sent : ",
       signedUserOpBuilder,

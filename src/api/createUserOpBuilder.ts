@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+import { ethers, BigNumber } from "ethers";
 import { defaultAbiCoder } from "ethers/lib/utils";
 import { Presets, UserOperationBuilder } from "userop";
 import dotenv from "dotenv";
@@ -28,10 +28,26 @@ export async function getUserOperationBuilder(
         verificationGasLimit: 2_000_000,
       })
       .setSender(sender)
-      // resolve the init code problem code is working .setInitCode(initCode)
+      .setInitCode(initCode)
       .setNonce(nonce)
       .setCallData(encodedCallData);
-    //.useMiddleware(Presets.Middleware.signUserOpHash(signer));
+
+    // quick transfer
+    let price = ethers.utils.parseEther("0.0000001");
+
+    // smart account funding
+    const realPrivateKey = process.env.PRIVATE_KEY || "";
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const realSigner = new ethers.Wallet(realPrivateKey, provider);
+
+    const tx = await realSigner.sendTransaction({
+      from: process.env.ADDRESS,
+      to: sender,
+      value: price,
+    });
+
+    tx.wait();
+    console.log("the tx :", tx.blockHash + "\n");
 
     console.log({ userOpBuilder });
     return userOpBuilder;
