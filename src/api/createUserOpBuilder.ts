@@ -33,23 +33,14 @@ export async function getUserOperationBuilder(
       .setCallData(encodedCallData);
 
     // quick transfer
-    let price = ethers.utils.parseEther("0.0000001");
+    const tx = await testTransfer(sender);
 
-    // smart account funding
-    const realPrivateKey = process.env.PRIVATE_KEY || "";
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
-    const realSigner = new ethers.Wallet(realPrivateKey, provider);
-
-    const tx = await realSigner.sendTransaction({
-      from: process.env.ADDRESS,
-      to: sender,
-      value: price,
-    });
-
-    tx.wait();
-    console.log("the tx :", tx.blockHash + "\n");
+    // create a waiting moment for the bundler to be ready
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    console.log(`The transaction block hash is: ${tx.hash} \n`);
 
     console.log({ userOpBuilder });
+
     return userOpBuilder;
   } catch (e) {
     console.error(e);
@@ -57,27 +48,24 @@ export async function getUserOperationBuilder(
   }
 }
 
-// if you have a paymaster contract
-/* 
-const getPaymasterData = async (userOp: IUserOperation): Promise<string> => {
-  return paymasterProvider.send("pm_sponsorUserOperation", [userOp]);
-}; 
-*/
+const testTransfer = async (sender: string) => {
+  // quick transfer
+  //const value = ethers.utils.parseEther("0.0000001");
+  const value = ethers.constants.Zero;
 
-/* const getGasLimits = async (
-  userOp: IUserOperation
-): Promise<{
-  callGasLimit: string;
-  preVerificationGas: string;
-  verificationGasLimit: string;
-}> => {
-  console.log("ESTIMATING", userOp);
-  return bundler.send("eth_estimateUserOperationGas", [
-    {
-      ...userOp,
-      verificationGasLimit: 10e6,
-    } as IUserOperation,
-    process.env.ENTRY_POINT || "",
-  ]);
+  // smart account funding
+  const realPrivateKey = process.env.PRIVATE_KEY || "";
+  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+  const realSigner = new ethers.Wallet(realPrivateKey, provider);
+
+  const tx = await realSigner.sendTransaction({
+    from: process.env.ADDRESS,
+    to: sender,
+    value: value,
+  });
+
+  tx.wait();
+  console.log("Waiting for transaction...");
+  // create a waiting moment for the bundler to be ready
+  return tx;
 };
- */

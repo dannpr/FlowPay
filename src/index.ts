@@ -24,7 +24,8 @@ async function main() {
 
   const to = process.env.ADDRESS || "";
 
-  const value = ethers.constants.Zero; //ethers.utils.parseEther("0.000640");
+  const value = ethers.constants.Zero;
+  //const value = ethers.utils.parseEther("0.0000001");
 
   CreatePayflowAccount(to, value);
 }
