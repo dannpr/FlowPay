@@ -10,8 +10,6 @@ export const bundler = new providers.JsonRpcProvider(
   process.env.BUNDLER_RPC_URL_STACK || ""
 );
 
-/*
-  If I have a contract 
-  export const paymasterProvider = new ethers.providers.StaticJsonRpcProvider(
+export const paymasterProvider = new ethers.providers.StaticJsonRpcProvider(
   process.env.PAYMASTER_URL_STACK
-); */
+);

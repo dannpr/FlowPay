@@ -3,13 +3,12 @@ import { concat } from "ethers/lib/utils";
 import { randomBytes } from "crypto";
 import {
   entrypointContract,
-  getWalletContract,
   simpleAccountAbi,
   walletFactoryContract,
 } from "./../contract";
 import { getUserOperationBuilder } from "./createUserOpBuilder";
 import { provider } from "../providers";
-import { Client, ISigner, Presets } from "userop";
+import { Client, Presets } from "userop";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -47,7 +46,7 @@ export async function CreatePayflowAccount(
     const accountExist = await inAccountExist(walletAddress);
     // check if account exist
     if (!accountExist) {
-      console.log("2.b) Create data and initCode \n");
+      console.log("2.a) Create data and initCode \n");
       // set the data to be sent to the wallet factory contract
       const data = walletFactoryContract.interface.encodeFunctionData(
         "createAccount",
@@ -98,23 +97,7 @@ export async function CreatePayflowAccount(
 
     console.log(`4.b)  Gas price and signature are set`);
 
-    // create & init client
-    const client = await Client.init(process.env.BUNDLER_RPC_URL_STACK || "");
-    console.log(`4.b)  client is init`);
-
-    const UserOp = await client.buildUserOperation(userOpBuilder);
-
-    console.log({ UserOp });
-
-    console.log(`5) Built User Operation with client built`);
-
-    const response = await client.sendUserOperation(userOpBuilder);
-    const userOperationEvent = await response.wait();
-    console.log("Waiting for transaction...");
-
-    console.log(
-      `6) Transaction sent : ${userOperationEvent?.transactionHash ?? null}`
-    );
+    await sendUserOpStackup(userOpBuilder);
   } catch (error) {
     console.log(error);
   }
@@ -148,7 +131,34 @@ const inAccountExist = async (accountAddress: string) => {
   console.log("yo account wallet Code", inAccountCode, "\n");
   const accountExist = inAccountCode !== "0x";
 
+  if (!accountExist) console.log("Account don't exist need to deploy it \n");
+
   console.log(accountExist + "\n");
 
   return accountExist;
 };
+
+const sendUserOpStackup = async (userOpBuilder: any) => {
+  try {
+    // create & init client
+    const client = await Client.init(process.env.BUNDLER_RPC_URL_STACK || "");
+    console.log(`4.b)  client is init`);
+
+    const UserOp = await client.buildUserOperation(userOpBuilder);
+
+    console.log({ UserOp });
+
+    console.log(`5) Built User Operation with client built`);
+
+    const response = await client.sendUserOperation(userOpBuilder);
+    const userOperationEvent = await response.wait();
+    console.log("Waiting for transaction...");
+
+    console.log(
+      `6) Transaction sent : ${userOperationEvent?.transactionHash ?? null}`
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+const sendUserOpPimlico = async (userOpBuilder: any) => {};
