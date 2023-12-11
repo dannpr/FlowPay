@@ -5,9 +5,9 @@ import {
   entrypointContract,
   simpleAccountAbi,
   walletFactoryContract,
-} from "./../contract";
+} from "../constants/contract";
 import { getUserOperationBuilder } from "./createUserOpBuilder";
-import { provider } from "../providers";
+import { provider } from "../constants/providers";
 import { Client, Presets } from "userop";
 import dotenv from "dotenv";
 
@@ -133,7 +133,7 @@ const inAccountExist = async (accountAddress: string) => {
 
   if (!accountExist) console.log("Account don't exist need to deploy it \n");
 
-  console.log(accountExist + "\n");
+  console.log("the Address tho : " + accountExist + "\n");
 
   return accountExist;
 };
@@ -161,4 +161,19 @@ const sendUserOpStackup = async (userOpBuilder: any) => {
     console.log(error);
   }
 };
-const sendUserOpPimlico = async (userOpBuilder: any) => {};
+const sendUserOpPimlico = async (userOpBuilder: any) => {
+  /*    
+const pimlicoProvider = new ethers.providers.StaticJsonRpcProvider(
+  pimlicoEndpoint
+);
+
+const result = await pimlicoProvider.send("pm_sponsorUserOperation", [
+  userOperation,
+  { entryPoint: entryPoint },
+]);
+const paymasterAndData = result.paymasterAndData; */
+};
+
+// do Batch transactions
+// add execution of zapper
+const formalizeBatch = async () => {};

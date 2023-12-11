@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2"
@@ -19,6 +21,8 @@
     "@types/node": "^20.10.3",
     "dotenv": "^16.3.1",
     "ethers": "^5.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "userop": "^0.3.6"
   }
 }

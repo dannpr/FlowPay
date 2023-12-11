@@ -2,7 +2,7 @@ import { ethers, BigNumber } from "ethers";
 import { defaultAbiCoder } from "ethers/lib/utils";
 import { Presets, UserOperationBuilder } from "userop";
 import dotenv from "dotenv";
-import { provider } from "../providers";
+import { provider } from "../constants/providers";
 dotenv.config();
 
 //  Send the userOp to the bundler
