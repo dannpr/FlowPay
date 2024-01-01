@@ -1,7 +1,9 @@
-import { CreatePayflowAccount } from "./api/InAccount";
+// import { CreatePayflowAccount } from "./api/InAccount";
 /* import { createSimpleAccount, sendUserOp } from "./api/simpleAccount_stack";
  */
-import { ethers } from "ethers";
+//import { ethers } from "ethers";
+
+import { getMoneriumToken } from "./api/monerium";
 
 async function main() {
   /* const { signer, simpleAccount } = await createSimpleAccount();
@@ -22,12 +24,13 @@ async function main() {
 
   await sendUserOp(simpleAccount); */
 
-  const to = process.env.ADDRESS || "";
+  /* const to = process.env.ADDRESS || "";
 
   const value = ethers.constants.Zero;
   //const value = ethers.utils.parseEther("0.0000001");
 
-  CreatePayflowAccount(to, value);
+  CreatePayflowAccount(to, value); */
+  getMoneriumToken();
 }
 
 main();
